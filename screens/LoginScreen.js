@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { TouchableOpacity, View, Text, TextInput, StyleSheet, Image, Switch, ImageBackground } from 'react-native';
 
 
+
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
+    const handleLogin = () => {
+        navigation.navigate('Student');
+    };
 
     return (
         <ImageBackground source={require('../assets/Construcator.png')} style={styles.background}>
@@ -36,7 +40,9 @@ export default function LoginScreen({ navigation }) {
                         onValueChange={setRememberMe}
                     />
                 </View>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                    onPress={handleLogin}
+                    style={styles.button}>
                     <Text style={styles.buttonText}>GİRİŞ</Text>
                 </TouchableOpacity>
             </View>
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         padding: 10,
-        backgroundColor: 'rgba(0, 0, 0, 0.16)', // Arka planı yarı saydam yapar
+        backgroundColor: 'rgba(0, 0, 0, 0.16)',
         borderRadius: 10,
     },
     logo: {
