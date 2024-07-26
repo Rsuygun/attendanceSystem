@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, Text, TextInput, StyleSheet, Image, Switch, ImageBackground } from 'react-native';
-
+import { TouchableOpacity, View, Text, TextInput, StyleSheet, Image, Switch, ImageBackground, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 
 export default function LoginScreen({ navigation }) {
@@ -8,8 +9,32 @@ export default function LoginScreen({ navigation }) {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
-    const handleLogin = () => {
-        navigation.navigate('Student');
+    const handleLogin = async () => {
+        if (email === '' || password === '') {
+            Alert.alert("Hata", "Lütfen e-posta ve parola alanlarını doldurun.");
+            return;
+        }
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigation.navigate('Student');
+        } catch (error) {
+            let errorMessage = '';
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    errorMessage = 'Geçersiz e-posta formatı.';
+                    break;
+                case 'auth/user-not-found':
+                    errorMessage = 'Bu e-posta ile kayıtlı kullanıcı bulunamadı.';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage = 'Yanlış parola. Lütfen tekrar deneyin.';
+                    break;
+                default:
+                    errorMessage = 'Giriş başarısız. Lütfen tekrar deneyin.';
+            }
+            Alert.alert("Giriş Başarısız", errorMessage);
+        }
     };
 
     return (
@@ -22,7 +47,7 @@ export default function LoginScreen({ navigation }) {
                         style={styles.input}
                         value={email}
                         onChangeText={setEmail}
-                        placeholderTextColor="#ccc"
+                        keyboardType="email-address"
                     />
                     <Text style={styles.inputText1}>PAROLA:</Text>
                     <TextInput
@@ -30,7 +55,6 @@ export default function LoginScreen({ navigation }) {
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry
-                        placeholderTextColor="#ccc"
                     />
                 </View>
                 <View style={styles.switchContainer}>
