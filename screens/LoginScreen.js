@@ -22,7 +22,7 @@ export default function LoginScreen({ navigation }) {
                     setRememberMe(true);
                 }
             } catch (error) {
-                console.error("Error loading remembered credentials: ", error);
+                console.error("Hatırlanan kimlik bilgileri yüklenirken hata oluştu: ", error);
             }
         };
 
