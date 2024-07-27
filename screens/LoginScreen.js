@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, View, Text, TextInput, StyleSheet, Image, Switch, ImageBackground, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+
+    useEffect(() => {
+        const loadRememberedCredentials = async () => {
+            try {
+                const storedEmail = await AsyncStorage.getItem('email');
+                const storedPassword = await AsyncStorage.getItem('password');
+                const storedRememberMe = await AsyncStorage.getItem('rememberMe');
+
+                if (storedEmail && storedPassword && storedRememberMe === 'true') {
+                    setEmail(storedEmail);
+                    setPassword(storedPassword);
+                    setRememberMe(true);
+                }
+            } catch (error) {
+                console.error("Error loading remembered credentials: ", error);
+            }
+        };
+
+        loadRememberedCredentials();
+    }, []);
 
     const handleLogin = async () => {
         if (email === '' || password === '') {
@@ -17,6 +37,17 @@ export default function LoginScreen({ navigation }) {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
+
+            if (rememberMe) {
+                await AsyncStorage.setItem('email', email);
+                await AsyncStorage.setItem('password', password);
+                await AsyncStorage.setItem('rememberMe', 'true');
+            } else {
+                await AsyncStorage.removeItem('email');
+                await AsyncStorage.removeItem('password');
+                await AsyncStorage.removeItem('rememberMe');
+            }
+
             navigation.navigate('Student');
         } catch (error) {
             let errorMessage = '';
@@ -47,6 +78,8 @@ export default function LoginScreen({ navigation }) {
                         style={styles.input}
                         value={email}
                         onChangeText={setEmail}
+                        placeholder="E-posta"
+                        placeholderTextColor="#ccc"
                         keyboardType="email-address"
                     />
                     <Text style={styles.inputText1}>PAROLA:</Text>
@@ -54,12 +87,15 @@ export default function LoginScreen({ navigation }) {
                         style={styles.input}
                         value={password}
                         onChangeText={setPassword}
+                        placeholder="Parola"
                         secureTextEntry
+                        placeholderTextColor="#ccc"
                     />
                 </View>
                 <View style={styles.switchContainer}>
                     <Text style={styles.Text}>Beni Hatırla</Text>
-                    <Switch style={styles.switch}
+                    <Switch
+                        style={styles.switch}
                         value={rememberMe}
                         onValueChange={setRememberMe}
                     />
