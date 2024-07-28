@@ -48,7 +48,12 @@ export default function LoginScreen({ navigation }) {
                 await AsyncStorage.removeItem('rememberMe');
             }
 
-            navigation.navigate('Student');
+            const teacherEmails = ['nihat_uygun@edu.tr'];
+            if (teacherEmails.includes(email)) {
+                navigation.navigate('Teacher');
+            } else {
+                navigation.navigate('Student');
+            }
         } catch (error) {
             let errorMessage = '';
             switch (error.code) {
