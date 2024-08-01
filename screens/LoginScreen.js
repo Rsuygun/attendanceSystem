@@ -83,8 +83,6 @@ export default function LoginScreen({ navigation }) {
                         style={styles.input}
                         value={email}
                         onChangeText={setEmail}
-                        placeholder="E-posta"
-                        placeholderTextColor="#ccc"
                         keyboardType="email-address"
                     />
                     <Text style={styles.inputText1}>PAROLA:</Text>
@@ -92,9 +90,7 @@ export default function LoginScreen({ navigation }) {
                         style={styles.input}
                         value={password}
                         onChangeText={setPassword}
-                        placeholder="Parola"
                         secureTextEntry
-                        placeholderTextColor="#ccc"
                     />
                 </View>
                 <View style={styles.switchContainer}>

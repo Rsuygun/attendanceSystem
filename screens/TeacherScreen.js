@@ -1,7 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Image, TouchableOpacity } from 'react-native';
 
-export default function TeacherScreen() {
+export default function TeacherScreen({ navigation }) {
+
+    const goToTakingAttendance = () => {
+        navigation.navigate('TakingAttendance');
+    }
+
+    const goToAttendanceList = () => {
+        navigation.navigate('AttendanceList');
+    }
+
     return (
         <ImageBackground source={require('../assets/Construcator.png')} style={styles.background}>
             <View style={styles.headerContainer}>
@@ -12,6 +21,7 @@ export default function TeacherScreen() {
                 <Image source={require('../assets/yoklama.png')} style={styles.image1} />
                 <View>
                     <TouchableOpacity
+                        onPress={goToTakingAttendance}
                         style={styles.textBackground}>
                         <Text style={styles.text}>Yoklama Al</Text>
                     </TouchableOpacity>
@@ -21,6 +31,7 @@ export default function TeacherScreen() {
                 <Image source={require('../assets/liste.png')} style={styles.image2} />
                 <View>
                     <TouchableOpacity
+                        onPress={goToAttendanceList}
                         style={styles.textBackground}>
                         <Text style={styles.text}>Yoklama Listesi</Text>
                     </TouchableOpacity>
