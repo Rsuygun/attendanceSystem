@@ -2,18 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Modal from 'react-native-modal';
+import { getAuth } from 'firebase/auth'; 
+import { auth } from '../firebase'; 
 
 export default function AttendanceScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [scanResult, setScanResult] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [attendanceMessage, setAttendanceMessage] = useState('');
 
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
+
+    const user = auth.currentUser;
+    if (user) {
+      setUserEmail(user.email);
+    }
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
@@ -22,8 +31,12 @@ export default function AttendanceScreen() {
     setModalVisible(true);
   };
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const markAttendance = async () => {
+    setAttendanceMessage('Yoklamaya Katıldınız');
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   if (hasPermission === null) {
@@ -48,10 +61,18 @@ export default function AttendanceScreen() {
       )}
       <Modal isVisible={isModalVisible}>
         <View style={styles.modalContent}>
-          <Text style={styles.scanResult}>{`Scanned data: ${scanResult}`}</Text>
-          <TouchableOpacity style={styles.button} onPress={toggleModal}>
-            <Text style={styles.buttonText}>Yoklamaya Katıl</Text>
-          </TouchableOpacity>
+          <Text style={styles.scanResult}>{`Öğrenci : ${userEmail}`}</Text>
+          <Text style={styles.attendanceMessage}>{attendanceMessage}</Text>
+          {attendanceMessage === '' && (
+            <TouchableOpacity style={styles.button} onPress={markAttendance}>
+              <Text style={styles.buttonText}>Yoklamaya Katıl</Text>
+            </TouchableOpacity>
+          )}
+          {attendanceMessage !== '' && (
+            <TouchableOpacity style={styles.button} onPress={closeModal}>
+              <Text style={styles.buttonText}>Tamam</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </Modal>
       {!scanned && <Text style={styles.prompt}>Lütfen QR Kodu Okutun</Text>}
@@ -87,6 +108,12 @@ const styles = StyleSheet.create({
   scanResult: {
     fontSize: 18,
     marginBottom: 10,
+  },
+  attendanceMessage: {
+    fontSize: 20,
+    color: 'green',
+    fontWeight: 'bold',
+    marginTop: 10,
   },
   prompt: {
     position: 'absolute',
