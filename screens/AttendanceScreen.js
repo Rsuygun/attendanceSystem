@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Modal from 'react-native-modal';
-import { getAuth } from 'firebase/auth'; 
+import { getAuth } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { collection, addDoc } from 'firebase/firestore'; 
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function AttendanceScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -34,16 +34,16 @@ export default function AttendanceScreen() {
 
   const markAttendance = async () => {
     try {
-        await addDoc(collection(db, 'attendances'), {
-            email: userEmail,
-            qrCodeData: scanResult,
-            timestamp: new Date(),
-        });
-        setAttendanceMessage('Yoklamaya Katıldınız');
+      await addDoc(collection(db, 'attendances'), {
+        email: userEmail,
+        qrCodeData: scanResult,
+        timestamp: new Date(),
+      });
+      setAttendanceMessage('Yoklamaya Katıldınız');
     } catch (error) {
-        setAttendanceMessage('Yoklama Kaydedilemedi');
+      setAttendanceMessage('Yoklama Kaydedilemedi');
     }
-};
+  };
 
   const closeModal = () => {
     setModalVisible(false);
