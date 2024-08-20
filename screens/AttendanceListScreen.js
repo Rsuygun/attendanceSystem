@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, ImageBackground, TouchableOpacity } from 'react-native';
-import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import { View, Text, StyleSheet, FlatList, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { collection, onSnapshot, doc, deleteDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default function AttendanceScreen() {
@@ -20,6 +20,11 @@ export default function AttendanceScreen() {
         return () => unsubscribe();
     }, []);
 
+    const getCurrentDate = () => {
+        const date = new Date();
+        return date.toLocaleDateString();
+    };
+
     const handleDelete = async (id) => {
         try {
             await deleteDoc(doc(db, 'attendances', id));
@@ -28,15 +33,34 @@ export default function AttendanceScreen() {
         }
     };
 
+    const handleSaveAttendance = () => {
+        Alert.alert(
+            "Başarılı",
+            "Yoklama Başarıyla Kaydedildi",
+            [
+                {
+                    text: "Tamam",
+                    onPress: async () => {
+                        const batch = writeBatch(db);
+                        attendanceList.forEach(item => {
+                            const docRef = doc(db, 'attendances', item.id);
+                            batch.delete(docRef);
+                        });
+                        await batch.commit();
+                        setAttendanceList([]);
+                    }
+                }
+            ]
+        );
+    };
+
     const renderItem = ({ item, index }) => (
         <View style={styles.item}>
             <Text style={styles.indexText}>{index + 1}.</Text>
             <Text style={styles.itemText}>{item.email}</Text>
-            <View style={styles.deleteButtonContainer}>
-                <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-                    <Text style={styles.deleteText}>X</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
+                <Text style={styles.deleteText}>X</Text>
+            </TouchableOpacity>
         </View>
     );
 
@@ -47,13 +71,16 @@ export default function AttendanceScreen() {
                     <Text style={styles.title}>Yoklama Listesi</Text>
                 </View>
                 <View style={styles.flatListContainer}>
+                <Text style={styles.dateText}>{getCurrentDate()}</Text>
+                <Text style={styles.titleClass}>Mühendislik Matematiği</Text>
                     <FlatList
                         data={attendanceList}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id}
                     />
                     <TouchableOpacity
-                        style={styles.button}>
+                        style={styles.button}
+                        onPress={handleSaveAttendance}>
                         <Text style={styles.buttonText}>Yoklamayı Kaydet</Text>
                     </TouchableOpacity>
                 </View>
@@ -116,12 +143,14 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         marginLeft: 'auto',
+        backgroundColor: 'rgba(0, 0, 0, 0.16)',
+        padding: 3,
+        borderRadius: 4 
     },
     deleteText: {
         fontSize: 18,
-        color: 'darkgray',
-        padding: 2,
-        marginHorizontal: 2
+        color: 'lightgray',
+        padding: 0.5
     },
     button: {
         backgroundColor: 'lightblue',
@@ -138,8 +167,14 @@ const styles = StyleSheet.create({
         fontSize: 23,
         fontWeight: 'bold'
     },
-    deleteButtonContainer: {
-        backgroundColor: 'rgba(0, 0, 0, 0.16)',
-        borderRadius: 5
+    titleClass: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: "#154F91",
+    },
+    dateText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#154F91',
     }
 });
