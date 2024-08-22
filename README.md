@@ -1,6 +1,8 @@
 
 #University Attendance System
+
 This mobile application is designed for university attendance management. It is built using React Native, React, Expo CLI, and JavaScript.
+
 ###Features 
 -------------
 
@@ -24,6 +26,7 @@ This mobile application is designed for university attendance management. It is 
 + JavaScript
 
 ####License
+
 This project is licensed under the MIT License
 
 
