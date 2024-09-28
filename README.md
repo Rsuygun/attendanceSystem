@@ -1,5 +1,3 @@
-## English Version
-
 # Attendance System
 
 ## Project Overview
@@ -45,8 +43,7 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
   bash
   expo start
   
-
-## Turkish Version
+---
 
 # Yoklama Sistemi
 
