@@ -34,7 +34,6 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
   bash
   cd attendance-system
   
-
 3. Install dependencies:
   bash
   npm install
@@ -80,7 +79,6 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
   bash
   cd attendance-system
   
-
 3. Bağımlılıkları yükleyin:
   bash
   npm install
