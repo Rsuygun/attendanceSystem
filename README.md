@@ -29,6 +29,7 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
 1. Clone the repository:
    ```bash
    git clone https://github.com/Rsuygun/attendanceSystem
+```
    
 2. Navigate into the project folder:
   ```bash
