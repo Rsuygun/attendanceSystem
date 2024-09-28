@@ -27,20 +27,23 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
 
 ### Installation:
 1. Clone the repository:
-   bash
+   ```bash
    git clone https://github.com/Rsuygun/attendanceSystem
    
 2. Navigate into the project folder:
-  bash
+  ```bash
   cd attendance-system
+```
   
 3. Install dependencies:
-  bash
+  ```bash
   npm install
+```
   
 4. Start the Expo development server:
-  bash
+  ```bash
   expo start
+```
   
 ---
 
@@ -72,20 +75,24 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
 
 ### Kurulum:
 1. Depoyu klonlayın:
-   bash
+   ```bash
    git clone https://github.com/Rsuygun/attendanceSystem
+   ```
 
 2. Proje dizinine geçin:
-  bash
+  ```bash
   cd attendance-system
+```
   
 3. Bağımlılıkları yükleyin:
-  bash
+  ```bash
   npm install
+```
   
 4. Expo geliştirme sunucusunu başlatın:
-  bash
+  ```bash
   expo start
+```
 
 
    
