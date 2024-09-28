@@ -30,6 +30,7 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
    ```bash
    git clone https://github.com/Rsuygun/attendanceSystem
 ```
+```
    
 2. Navigate into the project folder:
   ```bash
@@ -78,7 +79,8 @@ The *Attendance System* is a mobile application designed to simplify and digitiz
 1. Depoyu klonlayın:
    ```bash
    git clone https://github.com/Rsuygun/attendanceSystem
-   ```
+```
+```
 
 2. Proje dizinine geçin:
   ```bash
